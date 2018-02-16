@@ -1,0 +1,7 @@
+#products-grid .products-card{
+    border:1px dotted darkblue;
+    padding:5px;
+    margin: 5px 0;
+    float:left;
+    width:30%;
+}
