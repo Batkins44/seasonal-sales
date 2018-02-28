@@ -1,8 +1,12 @@
-"use strict";
+// "use strict";
 
 var button = document.getElementById("season-btn");
+
+let currentDiscount;
+
 var salesProducts = (function() {
-    var privateProducts = [];
+var privateProducts = [];
+
 
     return{
         loadProducts: function(callbackFunction){
@@ -14,7 +18,7 @@ var salesProducts = (function() {
             loader.addEventListener("load", function(){
                 // set the value of the private array
                 privateProducts = JSON.parse(this.responseText).products;
-                console.log("private Products", privateProducts);
+
                 // list the carnivores in the DOM
             callbackFunction(privateProducts);
 
@@ -35,7 +39,7 @@ var salesCategories = (function() {
     var privateCategories = [];
 
     return{
-        loadCategories: function(){
+        loadCategories: function(callbackFunction){
             // create an XHR to load Carnivores
             var loader = new XMLHttpRequest();
 
@@ -44,9 +48,9 @@ var salesCategories = (function() {
             loader.addEventListener("load", function(){
                 // set the value of the private array
                 privateCategories = JSON.parse(this.responseText).categories;
-                console.log("private Categories", privateCategories);
-                // list the carnivores in the DOM
 
+                // list the carnivores in the DOM
+                callbackFunction(privateCategories);
 
                     
                 
@@ -91,36 +95,42 @@ function gridProducts(products){
         list.innerHTML = outputString;
 }};
 
-function determineSeason(){
+function determineSeason(categories){
     console.log("im here bitch")
     var currentSeason = document.getElementById("dropdown").value;
-    return currentSeason;
-    if (currentSeason == 1){
+    // return currentSeason;
+    // if (currentSeason == 1){
         console.log("winter")
-    };
-    if(currentSeason == 2){
-        console.log("autumn")
-    };
-    if(currentSeason ==3){
-        console.log("spring")
+        currentDiscount = categories[currentSeason].discount;
+        discount = 1-currentDiscount;
 
-    }
-
+return discount
 }
 
 
 function discounts(products){
-    var season = determineSeason();
-    console.log("this is the season",season);
+    // var season = determineSeason();
+    var currentSeason = document.getElementById("dropdown").value;
+    console.log("this is the discount",discount);
     for (let i = 0; i < products.length; i++) {
         var currentProduct = products[i];
         var currentId = currentProduct.category_id
-        console.log("please fucking work",currentId)
-        if(currentId == 1){
+        // console.log("currentDiscount",currentDiscount);
+        if(currentId == 1 && currentSeason == 0){
             var x = currentProduct.price
-            currentProduct.price = (.9*x)
+            currentProduct.price = (x * discount);
             console.log("HUUUUUGEE", currentProduct.price);
-
+           currentProduct.price = Math.round(currentProduct.price * 100) / 100;
+        }else if(currentId == 2 && currentSeason == 1){
+            var x = currentProduct.price
+            currentProduct.price = (x * discount);
+            console.log("HUUUUUGEE", currentProduct.price);
+           currentProduct.price = Math.round(currentProduct.price * 100) / 100;
+        }else if(currentId == 3 && currentSeason ==2){
+            var x = currentProduct.price
+            currentProduct.price = (x * discount);
+            console.log("HUUUUUGEE", currentProduct.price);
+           currentProduct.price = Math.round(currentProduct.price * 100) / 100
         }
         var list = document.getElementById("products-list")
         var outputString = "";
@@ -137,15 +147,22 @@ function discounts(products){
     }
 }}
 
+function checkCategories(categories){
+
+
+}
+
 function runAll(){
-    salesProducts.loadProducts(discounts)
+    salesCategories.loadCategories(determineSeason);
+    salesProducts.loadProducts(discounts);
 };
 // var runAll = salesProducts.loadProducts(discounts);
 // salesProducts.loadProducts(winterDiscounts);
 
 salesProducts.loadProducts(listProducts);
-salesProducts.loadProducts(gridProducts);
-salesCategories.loadCategories();
+// salesProducts.loadProducts(gridProducts);
+salesCategories.loadCategories(determineSeason);
+// .then(function(value))
 // salesProducts.loadProducts(sortProducts);
 
 button.addEventListener("click",runAll);
@@ -153,75 +170,3 @@ button.addEventListener("click",runAll);
 
 
 
-// let api_calls = {};
-// let sales = [];
-// let salesArea = document.getElementById("salespot");
-
-// api_calls.getAllSales = () =>{
-//     console.log("Retrieving Sales");
-
-//     let salesXHR = new XMLHttpRequest();
-
-//     salesXHR.addEventListener("load",function(){
-//         let data = JSON.parse(this.responseText);
-//         console.log("data in call", data);
-//         sales = data.results;
-//         showSales(sales);
-//         populatePage(sales);
-//         sales.map(populatePage);
-//     });
-    
-//     salesXHR.addEventListener("error", function(){
-//         console.log("You got a problem");
-//     });
-    
-//     salesXHR.open("GET", "products.json");
-//     salesXHR.send();
-// };
-
-// api_calls.getSales = () => {
-//     return sales;
-// };
-
-// function populatePage(item, index){
-//     let newDiv = document.createElement("div");
-//     newDiv.innerHTML = itemGrid(item, index);
-//     document.getElementById("salespot").append(newDiv);
-// }
-
-// function showSales(val) {
-//     let output = `<li>${val}</li>`;
-//     return output;
-//  }
-
-// function itemGrid(item, index) {
-//    console.log("itemGrid");
-//    let salesArray = item.sales;
-//    let salesList;
-
-//    filmArray.forEach((item) => {
-//       salesList = (salesList) ? salesList + showSalesList(item) : showFilmList(item);
-//    });
-
-//    let output =
-//    `<section id="id--${id}" style="border:2px solid>
-//    <h3>Name: ${item.name}</h3>
-//    <h4>Price: ${item.price}</h4>
-//    <h6>Category ID: ${item.category_id}</h6>
-//    </section>`
-//    return output;
-   
-// }
-
-// function showSalesList(val) {
-//     let output = `<li><a href="${val}">${val}</a></li>`;
-//     return output;
-//  }
-
-// let button = document.getElementById("show-sales");
-// button.addEventListener("click", api_calls.getAllSales);
-
-
- 
-
- 
