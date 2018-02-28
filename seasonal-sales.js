@@ -96,11 +96,11 @@ function gridProducts(products){
 }};
 
 function determineSeason(categories){
-    console.log("im here bitch")
+
     var currentSeason = document.getElementById("dropdown").value;
     // return currentSeason;
     // if (currentSeason == 1){
-        console.log("winter")
+
         currentDiscount = categories[currentSeason].discount;
         discount = 1-currentDiscount;
 
@@ -111,25 +111,25 @@ return discount
 function discounts(products){
     // var season = determineSeason();
     var currentSeason = document.getElementById("dropdown").value;
-    console.log("this is the discount",discount);
+
     for (let i = 0; i < products.length; i++) {
         var currentProduct = products[i];
         var currentId = currentProduct.category_id
-        // console.log("currentDiscount",currentDiscount);
+
         if(currentId == 1 && currentSeason == 0){
             var x = currentProduct.price
             currentProduct.price = (x * discount);
-            console.log("HUUUUUGEE", currentProduct.price);
+
            currentProduct.price = Math.round(currentProduct.price * 100) / 100;
         }else if(currentId == 2 && currentSeason == 1){
             var x = currentProduct.price
             currentProduct.price = (x * discount);
-            console.log("HUUUUUGEE", currentProduct.price);
+
            currentProduct.price = Math.round(currentProduct.price * 100) / 100;
         }else if(currentId == 3 && currentSeason ==2){
             var x = currentProduct.price
             currentProduct.price = (x * discount);
-            console.log("HUUUUUGEE", currentProduct.price);
+
            currentProduct.price = Math.round(currentProduct.price * 100) / 100
         }
         var list = document.getElementById("products-list")
